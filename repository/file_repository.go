@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 
 	"github.com/916RasnitaRadu/todo-cli/file"
 	"github.com/916RasnitaRadu/todo-cli/types"
@@ -28,11 +29,6 @@ func (r *FileRepository) GetTasks() ([]types.Task, error) {
 	defer file.CloseFile(f)
 
 	reader := csv.NewReader(f)
-
-	// reading the header
-	if _, err := reader.Read(); err != nil {
-		return nil, fmt.Errorf("error reading the header")
-	}
 
 	for {
 		record, err := reader.Read()
@@ -59,7 +55,13 @@ func (r *FileRepository) Create(task types.Task) error {
 
 	writer := csv.NewWriter(f)
 
-	row := []string{strconv.FormatInt(int64(task.ID), 10), task.Description, task.CreatedAt, strconv.FormatBool(task.Done)}
+	row := []string{
+		strconv.Itoa(task.ID),
+		task.Description,
+		task.CreatedAt.Format(time.DateTime),
+		strconv.FormatBool(task.Done),
+		"\n",
+	}
 	if err := writer.Write(row); err != nil {
 		return fmt.Errorf("error creating new row")
 	}
@@ -81,13 +83,7 @@ func (r *FileRepository) Delete(id int) error {
 
 	reader := csv.NewReader(f)
 
-	// reading the header
-	header, err := reader.Read()
-	if err != nil {
-		return fmt.Errorf("error reading the header: %w", err)
-	}
 	var newRecords [][]string
-	newRecords = append(newRecords, header)
 	for {
 		task, err := reader.Read()
 		if err == io.EOF {
@@ -131,12 +127,7 @@ func (r *FileRepository) ChangeStatus(id int) error {
 
 	reader := csv.NewReader(f)
 
-	header, err := reader.Read()
-	if err != nil {
-		return fmt.Errorf("error reading the header: %w", err)
-	}
 	var newRecords [][]string
-	newRecords = append(newRecords, header)
 
 	for {
 		task, err := reader.Read()
@@ -152,7 +143,7 @@ func (r *FileRepository) ChangeStatus(id int) error {
 		taskId, _ := strconv.Atoi(task[0])
 		if taskId == id {
 			status, _ := strconv.ParseBool(task[3])
-			newTask = []string{task[0], task[1], task[2], strconv.FormatBool(!status)}
+			newTask = []string{task[0], task[1], task[2], strconv.FormatBool(!status), "\n"}
 		}
 		newRecords = append(newRecords, newTask)
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 func LoadFile(path string) (*os.File, error) {
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		log.Println("[ERROR]: error at opening the file")
 		return nil, fmt.Errorf("error at opening the file")
