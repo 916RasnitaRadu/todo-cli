@@ -1,11 +1,16 @@
 package main
 
 import (
-	"log"
+	"github.com/916RasnitaRadu/todo-cli/cli"
+	"github.com/916RasnitaRadu/todo-cli/repository"
+	"github.com/916RasnitaRadu/todo-cli/service"
 )
 
 func main() {
-	log.Println("forzinni")
+	repo := repository.NewFileRepository("tasks.csv")
+	srv := service.NewService(repo)
+	cli := cli.NewCLI(srv)
+	cli.Run()
 }
 
 /*
