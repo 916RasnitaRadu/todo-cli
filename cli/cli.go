@@ -32,7 +32,7 @@ func printMenu() {
 	`)
 }
 
-func (cli *CLI) getNextId() int {
+func (cli *CLI) GetNextId() int {
 	var maxId int
 	tasks, err := cli.srv.GetTasks()
 	if err != nil {
@@ -49,7 +49,7 @@ func (cli *CLI) getNextId() int {
 	return maxId + 1
 }
 
-func (cli *CLI) listTasks() {
+func (cli *CLI) ListTasks() {
 	tasks, err := cli.srv.GetTasks()
 	if err != nil {
 		fmt.Println("ERROR: ", err)
@@ -69,7 +69,7 @@ func (cli *CLI) createTask() {
 	taskName = strings.TrimSpace(taskName)
 
 	newTask := types.Task{
-		ID:          cli.getNextId(),
+		ID:          cli.GetNextId(),
 		Description: taskName,
 		CreatedAt:   time.Now(),
 	}
@@ -136,7 +136,7 @@ func (cli *CLI) Run() {
 
 		switch input {
 		case "1":
-			cli.listTasks()
+			cli.ListTasks()
 		case "2":
 			cli.createTask()
 		case "3":

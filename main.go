@@ -1,24 +1,28 @@
 package main
 
 import (
-	"github.com/916RasnitaRadu/todo-cli/cli"
-	"github.com/916RasnitaRadu/todo-cli/repository"
-	"github.com/916RasnitaRadu/todo-cli/service"
+	"github.com/916RasnitaRadu/todo-cli/cmd"
 )
 
 func main() {
-	repo := repository.NewFileRepository("tasks.csv")
-	srv := service.NewService(repo)
-	cli := cli.NewCLI(srv)
-	cli.Run()
+	cmd.Execute()
 }
 
 /*
-1. A task must have: ID, Task (name), Created At, Done
-2. Must support commands
-3. Must be a runnable application (?)
-4. Must support CRUD (create, list, update (write done/not done), delete)
-5. Must support file storage (CSV), and SQLITE (choose the storage through env vars)
+	TODO:
+		- SHOULD DO A VIEW PACKAGE REFACTOR (view = {cli + cmd + common})
+		- refactor errors management
+		- style interface
+		- display date using mergestat/timediff
+
+1. A task must have: ID, Task (name), Created At, Done x
+2. Must support commands x
+3. Must be a runnable application x
+4. Must support CRUD (create, list, update (write done/not done), delete) x
+5. Must support:
+	- file storage (CSV) x
+	- SQLITE
+	- (choose the storage through env vars)
 
 ------ packages
 encoding/csv
